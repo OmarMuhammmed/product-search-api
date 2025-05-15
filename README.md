@@ -15,7 +15,7 @@ This API is designed to handle large-scale product searches with the following k
 
 ## Tech Stack
 
-- **Backend Framework**: Django , Django REST Framework (DRF)
+- **Backend Framework**: Django, Django REST Framework (DRF)
 - **Database**: PostgreSQL 12+
 - **Additional Libraries**:
   - django-filter: For advanced filtering
@@ -23,52 +23,43 @@ This API is designed to handle large-scale product searches with the following k
   - psycopg2-binary: PostgreSQL adapter
   - django-cacheops: For query caching
 
+## High Level Architecture
+
+![API Architecture](search_service.jpg)
+
 ## Features
 
 ### Search Accuracy and Relevance 
 - Full-text search across product names and descriptions
-- Fuzzy matching for handling misspellings
+- Fuzzy matching for handling misspellings using PostgreSQL trigram similarity
 - Support for partial keywords
 - Mixed language support (English/Arabic)
-- Smart ranking of search results
-- Support for compound queries
+- Smart ranking of search results based on relevance
 
 ### Performance and Query Optimization 
-- PostgreSQL full-text search indexing
-- Query result caching
-- Efficient database queries
+- PostgreSQL full-text search indexing with GIN index
+- Query result caching for categories and brands (1-hour cache)
+- Efficient database queries with select_related
 - Pagination support
 - Optimized response times
 
 ### Code Quality and Structure 
 - Clean, maintainable Django code
 - Follows Django best practices
-- Modular architecture
+- Modular architecture with separate service layer
 - Comprehensive test coverage
 - Well-documented code
 
-### Documentation and Usability 
-- Clear API documentation
-- Example usage
-- Setup instructions
-- Testing guidelines
-
-### Bonus Features 
-- Advanced filtering capabilities
-- Response caching
-- Rate limiting
-- Bulk operations support
-
-##  API Documentation
+### API Documentation
 
 ### Categories
 
-- `GET /api/categories/` - List all categories
+- `GET /api/categories/` - List all categories (cached for 1 hour)
 - `GET /api/categories/{id}/` - Retrieve a specific category
 
 ### Brands
 
-- `GET /api/brands/` - List all brands
+- `GET /api/brands/` - List all brands (cached for 1 hour)
 - `GET /api/brands/{id}/` - Retrieve a specific brand
 
 ### Products
@@ -87,7 +78,7 @@ This API is designed to handle large-scale product searches with the following k
     - `min_price`: Filter by minimum price
     - `max_price`: Filter by maximum price
 
-##  Data Models
+## Data Models
 
 ### Category
 - `name` (string): Category name
@@ -111,6 +102,7 @@ This API is designed to handle large-scale product searches with the following k
 - `is_active` (boolean): Product availability status
 - `created_at` (datetime): Creation timestamp
 - `updated_at` (datetime): Last update timestamp
+- `search_vector` (SearchVectorField): For full-text search
 
 ### NutritionFacts
 - `calories` (float, optional): Calorie content
@@ -166,7 +158,7 @@ This API is designed to handle large-scale product searches with the following k
    python manage.py runserver
    ```
 
-##  Testing
+## Testing
 
 ### Running Tests
 
@@ -174,43 +166,27 @@ This API is designed to handle large-scale product searches with the following k
 python manage.py test
 ```
 
-### Test Coverage
-
-```bash
-coverage run manage.py test
-coverage report
-```
-
-##  Performance Optimization
+## Performance Optimization
 
 ### Database Indexing
 - Full-text search indexes on product names and descriptions
-- Indexes on frequently queried fields
-- Composite indexes for common query patterns
+- GIN index on search_vector field
+- PostgreSQL trigram extension for fuzzy matching
 
 ### Caching Strategy
 - Category and brand listings cached for 1 hour
-- Search results cached based on query parameters
-- Cache invalidation on data updates
+- Local memory cache backend (configurable for production)
 
 ### Query Optimization
 - Efficient use of PostgreSQL's full-text search
-- Optimized JOIN operations
+- Optimized JOIN operations with select_related
 - Pagination for large result sets
 
 ## Security
 
 - CORS configuration
-- Rate limiting
+- Rate limiting (100/minute for anonymous users, 1000/minute for authenticated users)
 - Input validation
 - SQL injection prevention
 - XSS protection
-
-## Monitoring
-
-- Query performance monitoring
-- Cache hit/miss tracking
-- Error logging
-- Response time tracking
-
 

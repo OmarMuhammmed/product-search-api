@@ -46,7 +46,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     
     # Search vector field for full text search with postegres
-    search_vector = SearchVectorField(null=True) # Link to the searchvector() function
+    search_vector = SearchVectorField(null=True) 
     
     def __str__(self):
         return self.name

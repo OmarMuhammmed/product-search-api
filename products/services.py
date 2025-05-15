@@ -32,9 +32,8 @@ class ProductSearchService:
         if has_arabic:
             search_configs.append('arabic')
         
-        # -----
         
-        # Initialize a complex query with multiple ranking components
+        # Divide your queryset to get a readable code and result
         queryset = queryset.annotate(
             # Full-text search ranking
             full_text_rank=SearchRank(
@@ -44,7 +43,7 @@ class ProductSearchService:
             name_similarity=TrigramSimilarity('name', query_string),
             name_ar_similarity=TrigramSimilarity('name_ar', query_string),
             brand_similarity=TrigramSimilarity('brand__name', query_string),
-            # Calculate overall relevance score
+            # Choose the most relevant field 
             relevance=Greatest(
                 F('full_text_rank') * Value(2.0, output_field=FloatField()),  # Full-text gets higher weight
                 F('name_similarity'),
