@@ -6,5 +6,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('products.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('', RedirectView.as_view(url='/api/', permanent=False)),
+    path('', RedirectView.as_view(url='/api/', permanent=False)), # Redirect to the API root
 ]

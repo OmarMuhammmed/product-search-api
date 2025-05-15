@@ -8,7 +8,7 @@ class Category(models.Model):
     
     def __str__(self):
         return self.name
-    
+     
     class Meta:
         verbose_name_plural = "Categories"
 
@@ -36,7 +36,7 @@ class Product(models.Model):
     name_ar = models.CharField(max_length=255, blank=True, null=True)  
     description = models.TextField(blank=True, null=True)
     description_ar = models.TextField(blank=True, null=True)  
-    sku = models.CharField(max_length=100, unique=True)
+    sku = models.CharField(max_length=100, unique=True) # Stock Keeping Unit 
     price = models.DecimalField(max_digits=10, decimal_places=2)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
@@ -46,7 +46,7 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     
     # Search vector field for full text search with postegres
-    search_vector = SearchVectorField(null=True)
+    search_vector = SearchVectorField(null=True) # Link to the searchvector() function
     
     def __str__(self):
         return self.name

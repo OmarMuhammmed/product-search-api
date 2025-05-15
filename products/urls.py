@@ -9,6 +9,5 @@ router.register(r'products', ProductViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    # Add a named URL for the search endpoint for testing
     path('products/search/', ProductViewSet.as_view({'get': 'search'}), name='product-search'),
 ]

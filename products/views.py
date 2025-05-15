@@ -17,7 +17,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     
-    @method_decorator(cache_page(60 * 60))  # Cache for 1 hour
+    @method_decorator(cache_page(60 * 60))  
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
@@ -25,9 +25,10 @@ class BrandViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
     
-    @method_decorator(cache_page(60 * 60))  # Cache for 1 hour
+    @method_decorator(cache_page(60 * 60))  
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.filter(is_active=True)
@@ -39,8 +40,10 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return ProductDetailSerializer
+        # Search or list 
         return ProductListSerializer
     
+    # Core of Task 
     @action(detail=False, methods=['get']) # /search
     def search(self, request):
         """
@@ -73,7 +76,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         )
         
         # Apply pagination
-        page = self.paginate_queryset(queryset)
+        page = self.paginate_queryset(queryset) # check if configured pagination exists in settings.py
         if page is not None:
             serializer = ProductListSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)

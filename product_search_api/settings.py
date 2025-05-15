@@ -113,10 +113,18 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/day',
-        'user': '1000/day'
+        'anon': '100/minute',
+        'user': '1000/minute'
     }
 }
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Cache settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', # I use LocMemCache for task, in production, use Redis Or Memcached
+        'LOCATION': 'unique-snowflake',
+    }
+}

@@ -23,7 +23,7 @@ This API is designed to handle large-scale product searches with the following k
   - psycopg2-binary: PostgreSQL adapter
   - django-cacheops: For query caching
 
-##  Features
+## Features
 
 ### Search Accuracy and Relevance 
 - Full-text search across product names and descriptions
@@ -120,7 +120,7 @@ This API is designed to handle large-scale product searches with the following k
 - `sugar` (float, optional): Sugar content in grams
 - `sodium` (float, optional): Sodium content in mg
 
-## 🛠️ Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 
@@ -132,7 +132,7 @@ This API is designed to handle large-scale product searches with the following k
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/product-search-api.git
+   git clone https://github.com/OmarMuhammmed/product-search-api.git
    cd product-search-api
    ```
 
